@@ -1,6 +1,4 @@
-====================================
 A small program by Dario Gomez :)
-====================================
 
 This program takes in a folder with .cbz files for each chapter of a manga, comic, etc. as an input and another folder to store all the panels for as an output.
 
