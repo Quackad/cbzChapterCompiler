@@ -13,7 +13,7 @@ def labelMove(parentFolder, outputFolder):
         if os.path.exists(parentFolder): 
             for root, dirs, files in os.walk(parentFolder):
                     for file in files:
-                            if file.lower().endswith('.cbz'):
+                            if file.lower().endswith('.cbz', '.zip'):
                                 cbz_path = os.path.join(root, file)
                             
                                 try: 
