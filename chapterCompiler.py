@@ -4,7 +4,7 @@ import argparse
 import tkinter as tk
 from tkinter import filedialog
 
-def labelMove(parentFolder, outputFolder):
+def labelMove(parentFolder, outputFolder, exportType):
         if not os.path.exists(outputFolder):
             os.makedirs(outputFolder)
 
@@ -38,6 +38,14 @@ def labelMove(parentFolder, outputFolder):
                                     extracted_path = os.path.join(outputFolder, f"{counter:03d}.jpg")
                                     os.rename(original_path, extracted_path)
                                     counter += 1
+                        if exportType.lower() == "cbz":
+                            cbz_filename = os.path.join(outputFolder, "output.cbz")
+                            with zipfile.ZipFile(cbz_filename, 'w') as cbz_file:
+                                for root, dirs, files in os.walk(outputFolder):
+                                    for file in files:
+                                        if file.lower().endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                                            file_path = os.path.join(root, file)
+                                            cbz_file.write(file_path, os.path.relpath(file_path, outputFolder))
         else:
             print("Specified directory does not exist, Contact Dario")
 
@@ -52,6 +60,7 @@ def executeExtraction(input_folder, output_folder):
 def main():
     root = tk.Tk()
     root.title("CBZ Chapter Compiler")
+
 
     input_folder_label = tk.Label(root, text="Input Folder:")
     input_folder_label.grid(row=0, column=0, padx=5, pady=5)
@@ -71,8 +80,12 @@ def main():
     output_folder_button = tk.Button(root, text="Browse", command=lambda: browseButton(output_folder_entry))
     output_folder_button.grid(row=1, column=2, padx=5, pady=5)
 
-    execute_button = tk.Button(root, text="Compile to Volume", command=lambda: executeExtraction(input_folder_entry, output_folder_entry))
+    execute_button = tk.Button(root, text="Compile to Folder", command=lambda: executeExtraction(input_folder_entry, output_folder_entry, "Folder"))
+    execute_button.grid(row=3, column=1, padx=5, pady=5)
+
+    execute_button = tk.Button(root, text="Compile to CBZ", command=lambda: executeExtraction(input_folder_entry, output_folder_entry, "CBZ"))
     execute_button.grid(row=2, column=1, padx=5, pady=5)
+
 
     root.mainloop()
     
